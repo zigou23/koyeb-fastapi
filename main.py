@@ -3,7 +3,6 @@ from typing import Union
 # 运行 python -m uvicorn main:app --reload  --no-use-colors
 import requests
 import random
-import platform # 获取系统类型/user
 import datetime # 获取当前时间/user
 from fastapi import FastAPI, Request
 from fastapi.responses import RedirectResponse
@@ -30,17 +29,12 @@ async def read_item(item_id: int, q: Union[str, None] = None):
 async def get_user_message(request: Request):
     headers = request.headers
     ip = request.client.host
-    # ua = request.headers.get("User-Agent")
-    platforms = platform.uname()
-    platform_list = ["system", "node", "release", "version", "machine", "processor"]
-    platform_msg = {key: value for key, value in zip(platform_list, platforms)}
     now_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     return jsonable_encoder({
         "headers": headers,
         "method": request.method,
         "url": str(request.url),
         "ip":ip,
-        "platform": platform_msg,
         "time": now_time
     })
 
